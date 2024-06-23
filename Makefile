@@ -42,4 +42,4 @@ setup: cert init
 		--target=aws_ecr_repository.zitadel \
 		--terragrunt-working-dir=${TF_MODULE_DIR} &&\
 	$(MAKE) docker &&\
-	terragrunt apply
+	$(MAKE) apply

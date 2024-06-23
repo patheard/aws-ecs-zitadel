@@ -19,8 +19,9 @@ resource "random_string" "alb_tg_suffix" {
   special = false
   upper   = false
   keepers = {
-    port     = 8080
-    protocol = "HTTPS"
+    port             = 8080
+    protocol         = "HTTPS"
+    protocol_version = "HTTP2"
   }
 }
 
@@ -28,6 +29,7 @@ resource "aws_lb_target_group" "zitadel" {
   name                 = "zitadel-tg-${random_string.alb_tg_suffix.result}"
   port                 = 8080
   protocol             = "HTTPS"
+  protocol_version     = "HTTP2"
   target_type          = "ip"
   deregistration_delay = 30
   vpc_id               = module.zitadel_vpc.vpc_id

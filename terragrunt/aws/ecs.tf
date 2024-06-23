@@ -90,16 +90,16 @@ module "zitadel_ecs" {
 
   cluster_name = "zitadel"
   service_name = "zitadel"
-  task_cpu     = 1024
-  task_memory  = 2048
+  task_cpu     = 4096
+  task_memory  = 8192
 
   enable_execute_command = true
 
   # Scaling
   enable_autoscaling       = true
-  desired_count            = 1
-  autoscaling_min_capacity = 1
-  autoscaling_max_capacity = 2
+  desired_count            = 3
+  autoscaling_min_capacity = 3
+  autoscaling_max_capacity = 6
 
   # Task definition
   container_image                     = "${aws_ecr_repository.zitadel.repository_url}:latest"

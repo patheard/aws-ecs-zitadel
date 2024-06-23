@@ -38,8 +38,8 @@ terraform {
 }
 
 inputs = {
-  zitadel_database_min_acu = 1
-  zitadel_database_max_acu = 2
+  zitadel_database_min_acu = 2
+  zitadel_database_max_acu = 3
 }
 
 include {
