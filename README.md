@@ -12,10 +12,10 @@ make setup
 ```
 
 ## Architecture
-1. This creates an ECS Fargate cluster with a single keyclock service running.
+1. This creates an ECS Fargate cluster with a `zitadel` service running.
 1. The database is an Aurora Postgres Serverless V2 cluster with an RDS proxy to handle connection pooling.
-1. This is fronted by an ALB with a single listener and target group.
-1. The VPC has two public subnets (with the ALB) and two private subnets (with the ECS Fargate cluster and RDS proxy).
+1. This is fronted by an ALB.
+1. The VPC has two public subnets (with the ALB) and two private subnets (with the ECS Fargate cluster and RDS cluster).
 
 ## Add another environment
 Copy the `./terragrunt/env/dev` directory and update `env_vars.hcl` file with new values.
