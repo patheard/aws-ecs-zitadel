@@ -1,9 +1,9 @@
-AWS_ACCOUNT_ID := 571510889204
+AWS_ACCOUNT_ID := 123456789012
 AWS_REGION := ca-central-1
 DOCKER_DIR := ./docker
 TF_MODULE_DIR := ./terragrunt/env/dev
 
-.PHONY: apply docker fmt init plan setup
+.PHONY: apply cert docker fmt init plan setup
 
 apply: init
 	@terragrunt apply --terragrunt-working-dir=${TF_MODULE_DIR}
@@ -17,6 +17,17 @@ docker:
 		--password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 	docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/zitadel:latest
 
+cert:
+	openssl \
+		req \
+		-nodes \
+		-newkey rsa:2048 \
+		-x509 -days 3650 \
+		-keyout ./docker/private.key \
+		-out ./docker/certificate.crt \
+		-subj "/C=CA/ST=Ontario/L=Ottawa/O=cds-snc/OU=platform/CN=zitadel.cdssandbox.xyz/emailAddress=platform@cds-snc.ca" &&\
+	chmod +r ./docker/private.key
+
 fmt:
 	@terragrunt fmt --terragrunt-working-dir=${TF_MODULE_DIR}
 
@@ -26,9 +37,9 @@ init:
 plan: init
 	@terragrunt plan --terragrunt-working-dir=${TF_MODULE_DIR}
 
-setup: init
+setup: cert init
 	terragrunt apply \
 		--target=aws_ecr_repository.zitadel \
-		--terragrunt-working-dir=${TF_MODULE_DIR}
-	$(MAKE) docker
+		--terragrunt-working-dir=${TF_MODULE_DIR} &&\
+	$(MAKE) docker &&\
 	terragrunt apply

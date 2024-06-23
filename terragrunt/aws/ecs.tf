@@ -22,7 +22,7 @@ locals {
     },
     {
       "name"  = "ZITADEL_EXTERNALSECURE",
-      "value" = "true" # TODO: set to true
+      "value" = "true"
     },              
     {
       "name"  = "ZITADEL_FIRSTINSTANCE_ORG_NAME",
@@ -35,6 +35,14 @@ locals {
     {
       "name"  = "ZITADEL_PORT",
       "value" = "8080"
+    },
+    {
+      "name"  = "ZITADEL_TLS_KEYPATH",
+      "value" = "/usr/local/share/ca-certificates/private.key"
+    },
+    {
+      "name"  = "ZITADEL_TLS_CERTPATH",
+      "value" = "/usr/local/share/ca-certificates/certificate.crt"
     },
   ]
   container_secrets = [
@@ -95,7 +103,7 @@ module "zitadel_ecs" {
 
   # Task definition
   container_image                     = "${aws_ecr_repository.zitadel.repository_url}:latest"
-  container_command                   = ["start-from-init", "--masterkeyFromEnv", "--tlsMode", "disabled"]
+  container_command                   = ["start-from-init", "--masterkeyFromEnv", "--tlsMode", "enabled"]
   container_host_port                 = 8080
   container_port                      = 8080
   container_environment               = local.container_env

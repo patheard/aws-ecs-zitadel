@@ -18,20 +18,24 @@ resource "random_string" "alb_tg_suffix" {
   length  = 3
   special = false
   upper   = false
+  keepers = {
+    port     = 8080
+    protocol = "HTTPS"
+  }
 }
 
 resource "aws_lb_target_group" "zitadel" {
   name                 = "zitadel-tg-${random_string.alb_tg_suffix.result}"
   port                 = 8080
-  protocol             = "HTTP"
+  protocol             = "HTTPS"
   target_type          = "ip"
   deregistration_delay = 30
   vpc_id               = module.zitadel_vpc.vpc_id
 
   health_check {
     enabled  = true
-    protocol = "HTTP"
-    path     = "/"
+    protocol = "HTTPS"
+    path     = "/debug/healthz"
     matcher  = "200-399"
   }
 
