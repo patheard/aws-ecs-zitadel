@@ -14,6 +14,17 @@ module "zitadel_vpc" {
   billing_tag_value = var.billing_code
 }
 
+resource "aws_network_acl_rule" "http_redirect" {
+  network_acl_id = module.zitadel_vpc.main_nacl_id
+  rule_number    = 100
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 80
+  to_port        = 80
+}
+
 #
 # Security groups
 #
