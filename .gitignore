@@ -1,0 +1,17 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+*.tfplan
+*.tfvars
+.terraform/
+
+# Terragrunt
+.terragrunt-cache/
+
+terragrunt/aws/common_variables.tf
+terragrunt/aws/backend.tf
+terragrunt/aws/provider.tf
+
+# Certs
+*.crt
+*.key

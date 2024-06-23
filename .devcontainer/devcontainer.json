@@ -1,0 +1,39 @@
+{
+	"name": "aws-ecs-zitadel",
+	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
+	"containerEnv": {
+		"SHELL": "/bin/zsh"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/aws-cli:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/terraform:1": {
+			"version": "1.8.5",
+			"terragrunt": "0.54.5"
+		}
+	},
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"hashicorp.terraform",
+				"github.copilot",
+				"github.vscode-github-actions",
+				"hashicorp.hcl",
+				"redhat.vscode-yaml"
+			]
+		},
+		"codespaces": {
+			"extensions": [
+				"hashicorp.terraform",
+				"github.copilot",
+				"github.vscode-github-actions",
+				"hashicorp.hcl",
+				"redhat.vscode-yaml"
+			]
+		}
+	},
+
+	"remoteUser": "vscode"
+}
