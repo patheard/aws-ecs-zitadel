@@ -86,7 +86,7 @@ locals {
 }
 
 module "zitadel_ecs" {
-  source = "github.com/cds-snc/terraform-modules//ecs?ref=v9.1.0"
+  source = "github.com/cds-snc/terraform-modules//ecs?ref=v9.5.1"
 
   cluster_name = "zitadel"
   service_name = "zitadel"

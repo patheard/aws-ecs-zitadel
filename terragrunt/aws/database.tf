@@ -2,7 +2,7 @@
 # RDS Postgress cluster
 #
 module "zitadel_database" {
-  source = "github.com/cds-snc/terraform-modules//rds?ref=v9.1.0"
+  source = "github.com/cds-snc/terraform-modules//rds?ref=v9.5.1"
   name   = "zitadel-${var.env}"
 
   database_name  = var.zitadel_database
