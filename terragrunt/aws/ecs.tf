@@ -15,7 +15,7 @@ locals {
     {
       "name"  = "ZITADEL_EXTERNALDOMAIN",
       "value" = var.domain
-    },    
+    },
     {
       "name"  = "ZITADEL_EXTERNALPORT",
       "value" = "443"
@@ -23,7 +23,7 @@ locals {
     {
       "name"  = "ZITADEL_EXTERNALSECURE",
       "value" = "true"
-    },              
+    },
     {
       "name"  = "ZITADEL_FIRSTINSTANCE_ORG_NAME",
       "value" = "cds-snc"
@@ -49,7 +49,7 @@ locals {
     {
       "name"      = "ZITADEL_DATABASE_POSTGRES_DATABASE"
       "valueFrom" = aws_ssm_parameter.zitadel_database.arn
-    },    
+    },
     {
       "name"      = "ZITADEL_DATABASE_POSTGRES_HOST"
       "valueFrom" = aws_ssm_parameter.zitadel_database_host.arn
@@ -77,7 +77,7 @@ locals {
     {
       "name"      = "ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD"
       "valueFrom" = aws_ssm_parameter.zitadel_admin_password.arn
-    },    
+    },
     {
       "name"      = "ZITADEL_MASTERKEY"
       "valueFrom" = aws_ssm_parameter.zitadel_secret_key.arn
@@ -97,9 +97,9 @@ module "zitadel_ecs" {
 
   # Scaling
   enable_autoscaling       = true
-  desired_count            = 3
-  autoscaling_min_capacity = 3
-  autoscaling_max_capacity = 6
+  desired_count            = 1
+  autoscaling_min_capacity = 1
+  autoscaling_max_capacity = 2
 
   # Task definition
   container_image                     = "${aws_ecr_repository.zitadel.repository_url}:latest"
@@ -114,7 +114,7 @@ module "zitadel_ecs" {
   ]
   task_role_policy_documents = [
     data.aws_iam_policy_document.ecs_task_create_tunnel.json
-  ]  
+  ]
 
   # Networking
   lb_target_group_arn = aws_lb_target_group.zitadel.arn
