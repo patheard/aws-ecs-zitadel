@@ -56,11 +56,11 @@ locals {
     },
     {
       "name"      = "ZITADEL_DATABASE_POSTGRES_USER_USERNAME"
-      "valueFrom" = aws_ssm_parameter.zitadel_database_admin_username.arn
+      "valueFrom" = aws_ssm_parameter.zitadel_database_username.arn
     },
     {
       "name"      = "ZITADEL_DATABASE_POSTGRES_USER_PASSWORD"
-      "valueFrom" = aws_ssm_parameter.zitadel_database_admin_password.arn
+      "valueFrom" = aws_ssm_parameter.zitadel_database_password.arn
     },
     {
       "name"      = "ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME"
@@ -86,7 +86,7 @@ locals {
 }
 
 module "zitadel_ecs" {
-  source = "github.com/cds-snc/terraform-modules//ecs?ref=v9.5.1"
+  source = "github.com/cds-snc/terraform-modules//ecs?ref=v9.5.2"
 
   cluster_name = "zitadel"
   service_name = "zitadel"
