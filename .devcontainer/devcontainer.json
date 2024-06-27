@@ -2,7 +2,8 @@
 	"name": "aws-ecs-zitadel",
 	"image": "mcr.microsoft.com/devcontainers/base:bullseye",
 	"containerEnv": {
-		"SHELL": "/bin/zsh"
+		"SHELL": "/bin/zsh",
+		"DOCKER_DEFAULT_PLATFORM": "linux/amd64"
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/aws-cli:1": {

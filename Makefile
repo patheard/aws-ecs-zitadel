@@ -11,7 +11,7 @@ apply: init
 docker:
 	docker build \
 		-t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/zitadel:latest \
-		-f ${DOCKER_DIR}/Dockerfile .
+		-f ${DOCKER_DIR}/Dockerfile ${DOCKER_DIR}
 	aws ecr get-login-password --region ${AWS_REGION} | docker login \
 		--username AWS \
 		--password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
@@ -23,10 +23,10 @@ cert:
 		-nodes \
 		-newkey rsa:2048 \
 		-x509 -days 3650 \
-		-keyout ./docker/private.key \
-		-out ./docker/certificate.crt \
+		-keyout ./${DOCKER_DIR}/private.key \
+		-out ./${DOCKER_DIR}/certificate.crt \
 		-subj "/C=CA/ST=Ontario/L=Ottawa/O=cds-snc/OU=platform/CN=zitadel.cdssandbox.xyz/emailAddress=platform@cds-snc.ca" &&\
-	chmod +r ./docker/private.key
+	chmod +r ./${DOCKER_DIR}/private.key
 
 fmt:
 	@terragrunt fmt --terragrunt-working-dir=${TF_MODULE_DIR}

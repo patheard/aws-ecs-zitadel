@@ -1,48 +1,8 @@
 locals {
   container_env = [
     {
-      "name"  = "ZITADEL_DATABASE_POSTGRES_PORT",
-      "value" = "5432"
-    },
-    {
-      "name"  = "ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE",
-      "value" = "require"
-    },
-    {
-      "name"  = "ZITADEL_DATABASE_POSTGRES_USER_SSL_MODE",
-      "value" = "require"
-    },
-    {
       "name"  = "ZITADEL_EXTERNALDOMAIN",
       "value" = var.domain
-    },
-    {
-      "name"  = "ZITADEL_EXTERNALPORT",
-      "value" = "443"
-    },
-    {
-      "name"  = "ZITADEL_EXTERNALSECURE",
-      "value" = "true"
-    },
-    {
-      "name"  = "ZITADEL_FIRSTINSTANCE_ORG_NAME",
-      "value" = "cds-snc"
-    },
-    {
-      "name"  = "ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORDCHANGEREQUIRED",
-      "value" = "false"
-    },
-    {
-      "name"  = "ZITADEL_PORT",
-      "value" = "8080"
-    },
-    {
-      "name"  = "ZITADEL_TLS_KEYPATH",
-      "value" = "/usr/local/share/ca-certificates/private.key"
-    },
-    {
-      "name"  = "ZITADEL_TLS_CERTPATH",
-      "value" = "/usr/local/share/ca-certificates/certificate.crt"
     },
   ]
   container_secrets = [
@@ -103,7 +63,7 @@ module "zitadel_ecs" {
 
   # Task definition
   container_image                     = "${aws_ecr_repository.zitadel.repository_url}:latest"
-  container_command                   = ["start-from-init", "--masterkeyFromEnv", "--tlsMode", "enabled"]
+  container_command                   = ["start-from-init", "--masterkeyFromEnv", "--tlsMode", "enabled", "--config", "/app/config.yaml", "--steps", "/app/steps.yaml"]
   container_host_port                 = 8080
   container_port                      = 8080
   container_environment               = local.container_env
