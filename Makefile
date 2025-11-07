@@ -8,7 +8,7 @@ TF_MODULE_DIR := ./terragrunt/env/dev
 apply: init
 	@terragrunt apply --terragrunt-working-dir=${TF_MODULE_DIR}
 
-docker:
+docker: cert
 	docker build \
 		-t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/zitadel:latest \
 		-f ${DOCKER_DIR}/Dockerfile ${DOCKER_DIR}
@@ -25,7 +25,7 @@ cert:
 		-x509 -days 3650 \
 		-keyout ./${DOCKER_DIR}/private.key \
 		-out ./${DOCKER_DIR}/certificate.crt \
-		-subj "/C=CA/ST=Ontario/L=Ottawa/O=cds-snc/OU=platform/CN=zitadel.cdssandbox.xyz/emailAddress=platform@cds-snc.ca" &&\
+		-subj "/C=CA/ST=Ontario/L=Ottawa/O=cds-snc/OU=platform/CN=zitadel.cdssandbox.xyz/emailAddress=platform@cds-snc.ca"
 	chmod +r ./${DOCKER_DIR}/private.key
 
 fmt:

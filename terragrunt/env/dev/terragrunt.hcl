@@ -38,10 +38,10 @@ terraform {
 }
 
 inputs = {
-  zitadel_database_min_acu = 2
-  zitadel_database_max_acu = 3
+  zitadel_database_min_acu = 0.5
+  zitadel_database_max_acu = 2
 }
 
 include {
-  path = find_in_parent_folders()
+  path = find_in_parent_folders("root.hcl")
 }

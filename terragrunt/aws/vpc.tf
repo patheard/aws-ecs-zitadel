@@ -1,5 +1,5 @@
 module "zitadel_vpc" {
-  source = "github.com/cds-snc/terraform-modules//vpc?ref=v9.5.2"
+  source = "github.com/cds-snc/terraform-modules//vpc?ref=v10.8.4"
   name   = "zitadel-${var.env}"
 
   enable_flow_log                  = true

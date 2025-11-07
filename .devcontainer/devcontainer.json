@@ -11,8 +11,8 @@
 		},
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
 		"ghcr.io/devcontainers/features/terraform:1": {
-			"version": "1.8.5",
-			"terragrunt": "0.54.5"
+			"version": "1.13.5",
+			"terragrunt": "0.93.3"
 		}
 	},
 

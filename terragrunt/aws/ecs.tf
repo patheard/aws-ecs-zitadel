@@ -46,14 +46,13 @@ locals {
 }
 
 module "zitadel_ecs" {
-  source = "github.com/cds-snc/terraform-modules//ecs?ref=v9.5.2"
+  source = "github.com/cds-snc/terraform-modules//ecs?ref=v10.8.4"
 
-  cluster_name = "zitadel"
-  service_name = "zitadel"
-  task_cpu     = 4096
-  task_memory  = 8192
-
-  enable_execute_command = true
+  cluster_name     = "zitadel"
+  service_name     = "zitadel"
+  task_cpu         = 4096
+  task_memory      = 8192
+  cpu_architecture = "ARM64"
 
   # Scaling
   enable_autoscaling       = true
@@ -72,14 +71,16 @@ module "zitadel_ecs" {
   task_exec_role_policy_documents = [
     data.aws_iam_policy_document.ecs_task_ssm_parameters.json
   ]
-  task_role_policy_documents = [
-    data.aws_iam_policy_document.ecs_task_create_tunnel.json
-  ]
 
-  # Networking
-  lb_target_group_arn = aws_lb_target_group.zitadel.arn
-  subnet_ids          = module.zitadel_vpc.private_subnet_ids
-  security_group_ids  = [aws_security_group.zitadel_ecs.id]
+  lb_target_group_arns = [
+    for protocol_version in local.protocol_versions : {
+      target_group_arn = aws_lb_target_group.zitadel[protocol_version].arn
+      container_name   = "zitadel"
+      container_port   = 8080
+    }
+  ]
+  subnet_ids         = module.zitadel_vpc.private_subnet_ids
+  security_group_ids = [aws_security_group.zitadel_ecs.id]
 
   billing_tag_value = var.billing_code
 }
@@ -106,20 +107,6 @@ data "aws_iam_policy_document" "ecs_task_ssm_parameters" {
       aws_ssm_parameter.zitadel_database_admin_password.arn,
       aws_ssm_parameter.zitadel_secret_key.arn
     ]
-  }
-}
-
-data "aws_iam_policy_document" "ecs_task_create_tunnel" {
-  statement {
-    sid    = "CreateSSMTunnel"
-    effect = "Allow"
-    actions = [
-      "ssmmessages:CreateControlChannel",
-      "ssmmessages:CreateDataChannel",
-      "ssmmessages:OpenControlChannel",
-      "ssmmessages:OpenDataChannel"
-    ]
-    resources = ["*"]
   }
 }
 

@@ -23,12 +23,6 @@ generate "provider" {
   contents  = file("./common/provider.tf")
 }
 
-generate "common_variables" {
-  path      = "common_variables.tf"
-  if_exists = "overwrite"
-  contents  = file("./common/common_variables.tf")
-}
-
 remote_state {
   backend = "s3"
   generate = {
@@ -38,10 +32,9 @@ remote_state {
   config = {
     encrypt             = true
     bucket              = "${local.billing_code}-tf"
-    dynamodb_table      = "terraform-state-lock-dynamo"
+    use_lockfile        = true
     region              = "ca-central-1"
-    key                 = "${path_relative_to_include()}/terraform.tfstate"
+    key                 = "terraform.tfstate"
     s3_bucket_tags      = { CostCenter : local.billing_code }
-    dynamodb_table_tags = { CostCenter : local.billing_code }
   }
 }

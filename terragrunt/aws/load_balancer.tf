@@ -19,17 +19,18 @@ resource "random_string" "alb_tg_suffix" {
   special = false
   upper   = false
   keepers = {
-    port             = 8080
-    protocol         = "HTTPS"
-    protocol_version = "HTTP2"
+    port     = 8080
+    protocol = "HTTPS"
   }
 }
 
 resource "aws_lb_target_group" "zitadel" {
-  name                 = "zitadel-tg-${random_string.alb_tg_suffix.result}"
+  for_each = local.protocol_versions
+
+  name                 = "zitadel-tg-${each.value}-${random_string.alb_tg_suffix.result}"
   port                 = 8080
   protocol             = "HTTPS"
-  protocol_version     = "HTTP2"
+  protocol_version     = each.value
   target_type          = "ip"
   deregistration_delay = 30
   vpc_id               = module.zitadel_vpc.vpc_id
@@ -64,7 +65,7 @@ resource "aws_lb_listener" "zitadel" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.zitadel.arn
+    target_group_arn = aws_lb_target_group.zitadel["HTTP2"].arn
   }
 
   depends_on = [
@@ -91,4 +92,23 @@ resource "aws_lb_listener" "zitadel_http_redirect" {
   }
 
   tags = local.common_tags
+}
+
+
+# Send REST API endpoint requests to the HTTP1 target group
+# All other requests are sent to the HTTP2 target group
+resource "aws_alb_listener_rule" "zitadel_protocol_version" {
+  listener_arn = aws_lb_listener.zitadel.arn
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.zitadel["HTTP1"].arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/oauth/v2/token", "/.well-known/openid-configuration"] # REST API endpoints
+    }
+  }
 }

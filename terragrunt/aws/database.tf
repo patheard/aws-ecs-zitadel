@@ -2,13 +2,13 @@
 # RDS Postgress cluster
 #
 module "zitadel_database" {
-  source = "github.com/cds-snc/terraform-modules//rds?ref=v9.5.2"
+  source = "github.com/cds-snc/terraform-modules//rds?ref=v10.8.4"
   name   = "zitadel-${var.env}"
 
   database_name           = var.zitadel_database
   engine                  = "aurora-postgresql"
-  engine_version          = "16.2"
-  instances               = 2
+  engine_version          = "16.8"
+  instances               = 1
   instance_class          = "db.serverless"
   serverless_min_capacity = var.zitadel_database_min_acu
   serverless_max_capacity = var.zitadel_database_max_acu
